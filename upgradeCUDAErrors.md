@@ -48,7 +48,7 @@ it should be like this. </br> </br>
 `...` </br>
 `Do you accept the previously read EULA? (accept/decline/quit): accept` </br>
 `You are attempting to install on an unsupported configuration. Do you wish to continue? ((y)es/(n)o) [ default is no ]: y` </br>
-`Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 352.39? ((y)es/(n)o/(q)uit): n` </br>
+***`Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 352.39? ((y)es/(n)o/(q)uit): n`***</br>
 `...` </br> </br>
 then yes, yes, yes blablabla </br> </br>
 "After installation is done, we have to set the environment varibles" (no need?) </br>
