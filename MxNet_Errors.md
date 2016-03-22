@@ -45,12 +45,12 @@ Before compiling mxnet, I also checked the numpy and scipy.
 `# choose the version of blas you want to use`</br>
 `# can be: mkl, blas, atlas, openblas`</br>
 `# in default use atlas for linux while apple for osx`</br>
-`UNAME_S := $(shell uname -s)`</br>
-`ifeq ($(UNAME_S), Darwin)`</br>
-`   USE_BLAS = apple`</br>
-`else`</br>
-`#  USE_BLAS = atlas`</br>
-`   USE_BLAS = openblas`</br>
-`endif`</br>
-
+    UNAME_S := $(shell uname -s)</br>
+    ifeq ($(UNAME_S), Darwin)</br>
+      USE_BLAS = apple</br>
+    else</br>
+      #  USE_BLAS = atlas</br>     
+      USE_BLAS = openblas</br>
+    endif</br>
+</br>
 P.S. This time, I ***donot*** change (switch) the lapack lib settings by using previous command.</br>
