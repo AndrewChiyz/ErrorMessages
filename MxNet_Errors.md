@@ -28,10 +28,11 @@ In `config.mk` file of MxNet project, settings about torch plugin of mxnet goes 
 `MXNET_PLUGINS += plugin/torch/torch.mk`</br>
 
 If your torch are not yet works fine, or you should probably use luarocks to install nn and cunn libs, </br>
-otherwise it may trigger the following error messages that</br>
+otherwise it may trigger the following error messages that</br></br>
+`...`
 `/usr/bin/ld?:cannot find lnn (maybe in this form)`</br>
 `/usr/bin/ld?:cannot find lcunn`</br>
-
+`...`</br>
 So now I have to check everything is fine about torch, or I can just comment the settings about torch plugin</br> 
 in config.mk of mxnet projects.</br>
 Before compiling mxnet, I also checked the numpy and scipy.
