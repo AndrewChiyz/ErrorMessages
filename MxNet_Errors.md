@@ -36,3 +36,21 @@ otherwise it may trigger the following error messages that</br></br>
 So now I have to check everything is fine about torch, or I can just comment the settings about torch plugin</br> 
 in config.mk of mxnet projects.</br>
 Before compiling mxnet, I also checked the numpy and scipy.
+
+# Update 3/22/2016
+
+***Change blas settings in config.mk file now, mxnet project can also be complied successfully.*** 
+***Interesting, Am I did some stupid things ... again?***</br>
+
+`# choose the version of blas you want to use`</br>
+`# can be: mkl, blas, atlas, openblas`</br>
+`# in default use atlas for linux while apple for osx`</br>
+`UNAME_S := $(shell uname -s)`</br>
+`ifeq ($(UNAME_S), Darwin)`</br>
+`USE_BLAS = apple`</br>
+`else`</br>
+`# USE_BLAS = atlas`</br>
+`USE_BLAS = openblas`</br>
+`endif`</br>
+
+P.S. This time, I ***donot*** change (switch) the lapack lib settings by using previous command.</br>
