@@ -37,7 +37,7 @@ So now I have to check everything is fine about torch, or I can just comment the
 in config.mk of mxnet projects.</br>
 Before compiling mxnet, I also checked the numpy and scipy.
 
-# Update 3/22/2016
+## Update 3/22/2016
 
 ***Change blas settings in config.mk file now, mxnet project can also be complied successfully.*** 
 ***Interesting, Am I did some stupid things ... again?***</br>
