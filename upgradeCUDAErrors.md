@@ -1,32 +1,30 @@
 # Recording of compiling Caffe with upgraded cuda-7.5 in Ubuntu 16.04
-# Pull newest code from github of caffe
-# install dependencies
-# libopencv should not be installed, cause I have complied and installed the opencv 2.4.11, the software source of Ubuntu 16.04 provides the version 2.4.9
-# if you didnot want to complie opencv, use instruction 'apt-get install libopencv-dev' to get the lib  
-'sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler'
-'sudo apt-get install --no-install-recommends libboost-all-dev'
-'sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev'
-'cp Makefile.config caffe/'
 
-'cd caffe'
-'git pull'
+1. install dependencies   
+libopencv should not be installed, cause I have complied and installed the opencv 2.4.11, the software source of Ubuntu 16.04 provides the version 2.4.9. If you donot want to compile opencv, use instruction `sudo apt-get install libopencv-dev` to get the libs.      
+`sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler`   
+`sudo apt-get install --no-install-recommends libboost-all-dev`    
+`sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev`    
+2. Pull newest code from github of caffe  
+`cp Makefile.config caffe/`   
+`cd caffe`  
+`git pull`  
+`vim Makefile.config`   
 
-'vim Makefile.config'
-# there are several different settings in 16.04, I think it may occur in 15.10 or 15.04
+there are several different settings in 16.04, I think it may occur in 15.10 or 15.04 too.
 
-'''
-# Uncomment to support layers written in Python (will link against Python libs)
-# This will require an additional dependency boost_regex provided by boost.
-WITH_PYTHON_LAYER := 1
+`# Uncomment to support layers written in Python (will link against Python libs)`    
+`# This will require an additional dependency boost_regex provided by boost.`    
+`WITH_PYTHON_LAYER := 1`    
 
-# Whatever else you find you need goes here. (here I show the updates in source code by github update style, and this is why I use '+')
--INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include 
--LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib
-+INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/
-+LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial
+`# Whatever else you find you need goes here.`
+`-INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include` 
+`-LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib`
+`+INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include ***/usr/include/hdf5/serial/***`
+`+LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib ***/usr/lib/x86_64-linux-gnu/hdf5/serial***`
 
 esc :wq
-'''
+
 
 'make -j 8'
 'make pycaffe'
