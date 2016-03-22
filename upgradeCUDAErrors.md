@@ -11,81 +11,83 @@ libopencv should not be installed, cause I have complied and installed the openc
 `git pull`  
 `vim Makefile.config`   
 
-there are several different settings in 16.04, I think it may occur in 15.10 or 15.04 too.
+There are several different settings in 16.04, I think it may occur in 15.10 or 15.04 too.
 
 `# Uncomment to support layers written in Python (will link against Python libs)`    
 `# This will require an additional dependency boost_regex provided by boost.`    
 `WITH_PYTHON_LAYER := 1`    
 
 `# Whatever else you find you need goes here.`
-`-INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include` 
-`-LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib`
-`+INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include ***/usr/include/hdf5/serial/***`
-`+LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib ***/usr/lib/x86_64-linux-gnu/hdf5/serial***`
+`# INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include` 
+`# LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib`
+`INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/`
+`LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial`
 
 esc :wq
 
+3. Compilation   </br>
 
-'make -j 8'
-'make pycaffe'
-'make runtest'
-'make test'
+`make -j 8` </br>
+`make pycaffe`</br>
+`make runtest`</br>
+`make test`</br>
 
-##################################################################################################################################################
-# About CUDA installation on 16.04
-# I still cannot find the reason why I cannot use .deb to install cuda SDK as well as the NVIDIA driver
-# Here I get the solution https://www.pugetsystems.com/labs/articles/NVIDIA-CUDA-with-Ubuntu-16-04-beta-on-a-laptop-if-you-just-cannot-wait-775/
-# The main idea is you have to first install NVIDIA driver by using manager 'software and updates'->'addtional drivers' to switch the nvidia drivers from opensource one to the other, here I switch it to 361.28 (tested)
-# The answer to question that why we cannot use .deb to install cuda SDK, answer from https://devtalk.nvidia.com/default/topic/924054/cuda-setup-and-installation/install-cuda-ubuntu-15-10-/ 
-# "CUDA 6.5 doesn't list Ubuntu 15.10 as a supported distro. CUDA 7.5 doesn't officially support that distro either, which is evident on Table 1 in the document you linked."
+4. About CUDA (7.5) installation on 16.04</br>
+
+I still cannot find the reason why I cannot use .deb file to install cuda SDK as well as the NVIDIA driver. </br>
+Here I get the solution https://www.pugetsystems.com/labs/articles/NVIDIA-CUDA-with-Ubuntu-16-04-beta-on-a-laptop-if-you-just-cannot-wait-775/</br>
+The main idea is you have to first install NVIDIA driver by using manager 'software and updates'->'addtional drivers' to</br>
+switch the nvidia drivers from opensource one to the other, here I switch it to 361.28 (tested)</br>
+
+The answer to question that why we cannot use .deb to install cuda SDK, answer from</br> https://devtalk.nvidia.com/default/topic/924054/cuda-setup-and-installation/install-cuda-ubuntu-15-10-/ </br>
+    "CUDA 6.5 doesn't list Ubuntu 15.10 as a supported distro. CUDA 7.5 doesn't officially support that distro either, which is evident on Table 1 in the document you linked."
 
 
 
-# After reboot the system, use apt-get to install the dependencies
+After reboot the system, use apt-get to install the dependencies
 sudo apt-get install ca-certificates-java default-jre default-jre-headless fonts-dejavu-extra freeglut3 freeglut3-dev java-common libatk-wrapper-java libatk-wrapper-java-jni  libdrm-dev libgl1-mesa-dev libglu1-mesa-dev libgnomevfs2-0 libgnomevfs2-common libice-dev libpthread-stubs0-dev libsctp1 libsm-dev libx11-dev libx11-doc libx11-xcb-dev libxau-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-glx0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb1-dev libxdamage-dev libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxmu-dev libxmu-headers libxshmfence-dev libxt-dev libxxf86vm-dev lksctp-tools mesa-common-dev openjdk-7-jre openjdk-7-jre-headless tzdata-java x11proto-core-dev x11proto-damage-dev x11proto-dri2-dev x11proto-fixes-dev x11proto-gl-dev x11proto-input-dev x11proto-kb-dev x11proto-xext-dev x11proto-xf86vidmode-dev xorg-sgml-doctools xtrans-dev libgles2-mesa-dev nvidia-modprobe build-essential
 
-# at the same time, you have to download the .run file of cuda SDK from NVIDIA.com
-# here I download cuda_7.5.18_linux.run, (and this is the source of nightmare, I should consider that all my complied projects, including opencv 2.4.11, caffe, mxnet, YOLO, deep-visual-toolbox, fast-rcnn etc. are all complied depending on CUDA-7.0, but I have already uninstall/autoremove(d) them.)
-# anyway
+at the same time, you have to download the .run file of cuda SDK from NVIDIA.com
+here I download cuda_7.5.18_linux.run, (and this is the source of nightmare, I should consider that all my complied projects, including opencv 2.4.11, caffe, mxnet, YOLO, deep-visual-toolbox, fast-rcnn etc. are all complied depending on CUDA-7.0, but I have already uninstall/autoremove(d) them.)
+anyway
 cd Download
 sudo chmod 755 cuda_7.5.18_linux.run
 sudo ./cuda_7.5.18_linux.run --override
-# push 'q' to exit from reading EULA.txt blablabla
-# then when the .run file tries to install nvidia-driver-352.39 chose no, we donot need install drivers anymore
-# it should be like this
+push 'q' to exit from reading EULA.txt blablabla
+then when the .run file tries to install nvidia-driver-352.39 chose no, we donot need install drivers anymore
+it should be like this
 
-###
+
 ...
 Do you accept the previously read EULA? (accept/decline/quit): accept
 You are attempting to install on an unsupported configuration. Do you wish to continue? ((y)es/(n)o) [ default is no ]: y
 Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 352.39? ((y)es/(n)o/(q)uit): n
 ...
-###
 
-# then yes, yes, yes blablabla
-# after installation is over, we have to set the environment varibles (no need?)
+
+then yes, yes, yes blablabla
+after installation is over, we have to set the environment varibles (no need?)
 sudo vim -nw /etc/profile.d/cuda.sh
-# type in (use i to insert)
+type in (use i to insert)
 export PATH=$PATH:/usr/local/cuda/bin esc :wq
-# I have already export cuda bin path to my ~/.bashrc, and I donot know whether or not it works if we donot do this step
+I have already export cuda bin path to my ~/.bashrc, and I donot know whether or not it works if we donot do this step
 sudo vim -nw /etc/ld.so.conf.d/cuda.conf
-# typein 
+typein 
 /usr/local/cuda/lib64 esc :wq
 source /etc/profile.d/cuda.sh
 sudo ldconfig
-# Open a new terminal
+Open a new terminal
 sudo vim /usr/local/cuda/include/host_config.h
-# line: 115 comment out error, gcc version in 16.04 is gcc-5.3.1 (here I show the updates in source code by github update style, and this is why I use '+')
+line: 115 comment out error, gcc version in 16.04 is gcc-5.3.1 (here I show the updates in source code by github update style, and this is why I use '+')
 +//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported! 
 
-# complie sample project to check everything is fine
-# since several findgllib.mk file pointed the nvidia-driver 352.39, We have to change the parameter UBUNTU_PKG_NAME to nvidia-361
+complie sample project to check everything is fine
+since several findgllib.mk file pointed the nvidia-driver 352.39, We have to change the parameter UBUNTU_PKG_NAME to nvidia-361
 samples/common/findgllib.mk and samples/3_Imaging/cudaDecodeGL/findgllib.mk
-#point driver to nvidia-361
+point driver to nvidia-361
 UBUNTU_PKG_NAME = "nvidia-361"
-# in Makefile add
+in Makefile add
 GLPATH=/usr/lib
-# then make 
+then make 
 make
 
-#################################################################################################################################################
