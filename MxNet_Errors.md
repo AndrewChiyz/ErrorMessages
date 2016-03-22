@@ -22,14 +22,14 @@ many solutions recommend me to uninstall/autoremove openblas, but I think it mig
 of many depended packages like caffe(and openblas is an important dependency of caffe), thus, Now I choose to </br>
 select lapack to avoid removing openblas.</br></br>
 About Torch plugin</br>
-In `config.mk` file of MxNet project, settings about torch plugin of mxnet goes </br>
+In `config.mk` file of MxNet project, settings about torch plugin of mxnet goes </br></br>
 `# whether to use torch integration. This requires installing torch.`</br>
 `TORCH_PATH = $(HOME)/torch`</br>
-`MXNET_PLUGINS += plugin/torch/torch.mk`</br>
+`MXNET_PLUGINS += plugin/torch/torch.mk`</br></br>
 
 If your torch are not yet works fine, or you should probably use luarocks to install nn and cunn libs, </br>
 otherwise it may trigger the following error messages that</br></br>
-`...`
+`...`</br>
 `/usr/bin/ld?:cannot find lnn (maybe in this form)`</br>
 `/usr/bin/ld?:cannot find lcunn`</br>
 `...`</br>
