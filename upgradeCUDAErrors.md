@@ -33,7 +33,7 @@ Here I get the solution https://www.pugetsystems.com/labs/articles/NVIDIA-CUDA-w
 The main idea is you have to first install NVIDIA driver by using manager 'software and updates'->'addtional drivers' to</br>
 switch the nvidia drivers from opensource one to the other, here I switch it to 361.28 (tested)</br>
 The answer to question that why we cannot use .deb to install cuda SDK, answer from</br> https://devtalk.nvidia.com/default/topic/924054/cuda-setup-and-installation/install-cuda-ubuntu-15-10-/</br></br>
-`"CUDA 6.5 doesn't list Ubuntu 15.10 as a supported distro. CUDA 7.5 doesn't officially support that distro either, which is evident on Table 1 in the document you linked."` </br>
+`"CUDA 6.5 doesn't list Ubuntu 15.10 as a supported distro. CUDA 7.5 doesn't officially support that distro either, which is evident on Table 1 in the document you linked."` </br></br>
 After reboot the system, use apt-get to install the dependencies </br>
 `sudo apt-get install ca-certificates-java default-jre default-jre-headless fonts-dejavu-extra freeglut3 freeglut3-dev java-common libatk-wrapper-java libatk-wrapper-java-jni  libdrm-dev libgl1-mesa-dev libglu1-mesa-dev libgnomevfs2-0 libgnomevfs2-common libice-dev libpthread-stubs0-dev libsctp1 libsm-dev libx11-dev libx11-doc libx11-xcb-dev libxau-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-glx0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb1-dev libxdamage-dev libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxmu-dev libxmu-headers libxshmfence-dev libxt-dev libxxf86vm-dev lksctp-tools mesa-common-dev openjdk-7-jre openjdk-7-jre-headless tzdata-java x11proto-core-dev x11proto-damage-dev x11proto-dri2-dev x11proto-fixes-dev x11proto-gl-dev x11proto-input-dev x11proto-kb-dev x11proto-xext-dev x11proto-xf86vidmode-dev xorg-sgml-doctools xtrans-dev libgles2-mesa-dev nvidia-modprobe build-essential` </br> </br>
 At the same time, you have to download the .run file of cuda SDK from NVIDIA.com </br>
@@ -43,7 +43,7 @@ anyway </br>
 `sudo chmod 755 cuda_7.5.18_linux.run` </br>
 `sudo ./cuda_7.5.18_linux.run --override` </br>
 push 'q' to exit from reading EULA.txt blablabla
-then ***when the .run file tries to install nvidia-driver-352.39 chose no***, we donot need install drivers anymore
+then ***when the .run file tries to install nvidia-driver-352.39 choose no***, we donot need install nvidia drivers anymore.</br>
 it should be like this. </br> </br>
 `...` </br>
 `Do you accept the previously read EULA? (accept/decline/quit): accept` </br>
