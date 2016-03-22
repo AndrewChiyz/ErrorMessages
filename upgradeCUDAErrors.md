@@ -63,15 +63,16 @@ typein
 `sudo ldconfig` </br>
 Open a new terminal </br>
 `sudo vim /usr/local/cuda/include/host_config.h` </br>
-line: 115 comment out error, gcc version in 16.04 is gcc-5.3.1 (here I show the updates in source code by github update style, and this is why I use '+') </br>
-`+//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported! ` </br>
-complie sample project to check everything is fine </br>
-since several findgllib.mk file pointed the nvidia-driver 352.39, We have to change the parameter UBUNTU_PKG_NAME to nvidia-361 </br>
-samples/common/findgllib.mk and samples/3_Imaging/cudaDecodeGL/findgllib.mk </br>
+line: 115 comment out error, gcc version in 16.04 is gcc-5.3.1 </br>
+`//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported! `</br>
+</br>Then Compile CUDA sample project to check everything is fine </br> 
+since several findgllib.mk file pointed to the nvidia-driver version 352.39, We have to change the parameter</br> UBUNTU_PKG_NAME to nvidia-361 </br>
+in files samples/common/findgllib.mk and samples/3_Imaging/cudaDecodeGL/findgllib.mk </br>
 point driver to nvidia-361 </br>
+`//UBUNTU_PKG_NAME = "nvidia-352"`</br>
 `UBUNTU_PKG_NAME = "nvidia-361"` </br>
 in Makefile add </br>
-`GLPATH=/usr/lib`
-then make 
-`make`
+`GLPATH=/usr/lib`</br>
+then make </br>
+`make`</br>
 
