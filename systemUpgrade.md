@@ -53,6 +53,5 @@ update initrd.img </br>
 `sudo update-grub` </br>
 `sudo reboot` </br>
 
-Now I can boot into the Ubuntu 16.04 system with kernel 4.4.0, then I choose to switch the driver from open source driver to a Nvidia driver by using 'addtional drivers'    
-tappage in 'software and updates' manager, and It works.
+Now I can boot into Ubuntu 16.04 system with kernel 4.4.0, then I choose to switch the driver from open source driver to a Nvidia driver by using 'addtional drivers' tappage in 'software and updates' manager, and It works.
 
