@@ -54,8 +54,9 @@ As expected, all the old kernels and the updated one cannot boot into the system
 
 ***Finally, Realise maybe I can Try to boot into recovery mode(stupid)*** </br>
 
-choose to boot in recovery mode of kernel 4.4.0.13, maybe the generated initrd.img works, I can now boot into   
-the system now. choose opensource nvidia driver in ‘software and updates’→’additional drivers’ choose </br>
+choose to boot in recovery mode of kernel 4.4.0.13, maybe the generated initrd.img works, I can boot into   
+the system now. and then I choose to switch opensource nvidia driver.   
+In ‘software and updates’→’additional drivers’ , choose </br>
 `x.org x server – nouveau display driver`  </br>
 `apply configuration` </br>
 update initrd.img </br>
