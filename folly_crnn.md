@@ -1,6 +1,6 @@
 # Error messages in processing of fblualib installation on OS:Ubuntu 16.04 with GCC version 5.3.1, and libboost-1.58
 
-In the file of install_all.sh, the bash codes will apt-get a lot of dependencies, as well as dependencies of libiberty-dev when using OS version higher then 13.10. Thus, ***I first close the check system version codes from line 25 to 37. and set the ``extra_packages=libiberty-dev`` mannually***. Then excute the installation code. Then it will git clone another three dependent packages including folly, fbthrift, thpp. And it seems that these three packages will be compiled and installed respectively.
+In file install_all.sh, codes will apt-get a lot of dependencies, as well as dependencies of libiberty-dev when using OS version higher than 13.10. Thus, ***I first close the checking-system-version codes from line 25 to 37. and set the ``extra_packages=libiberty-dev`` mannually***. Then excute the installation code. Then it will git clone another three dependent packages including folly, fbthrift, thpp. And it seems that these three packages will be compiled and installed respectively.
 
 ***Error message: Fix forward declaration of basic_string and list, for dual abi libstdc++ with inline std::__cxx11 namespace.***
 
