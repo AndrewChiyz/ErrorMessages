@@ -1,0 +1,192 @@
+# GPU driver and cuda installation
+#
+sudo dpkg -i ~/Downloads/cuda-repo-ubuntu1404-8-0-local-ga2_8.0.61-1_amd64.deb
+sudo apt-get update
+sudo apt-get install cuda
+
+# install CUDNN dependency
+# download cudnn version cudnn-8.0-linux-x64-v7.tgz 
+# folder structure
+# cuda
+   |___include
+   |___lib64
+tar xvf cudnn-8.0-linux-x64-v7.tgz 
+# 
+cd cuda
+sudo cp include/cudnn.h /usr/local/cuda/include
+sudo cp lib64/libcudnn* /usr/local/cuda/lib64
+cd /usr/local/cuda/lib64/
+sudo rm -rf libcudnn.so libcudnn.so.7
+sudo ln -sf libcudnn.so.7.0.2 libcudnn.so.7
+sudo ln -sf libcudnn.so.7 libcudnn.so
+sudo ldconfig
+# P.S. torch7 or pytorch and tensorflow-gpu_1.2.1 need cudnnv5.1, thus I changed this part in the following installation steps by replacing the cudnn with version 5.1
+# and rebuilt caffe
+
+
+# optional: link error
+#    /usr/lib/nvidia-375/libEGL.so.1 is not a symbolic link  
+#    /usr/lib32/nvidia-375/libEGL.so.1 is not a symbolic link  
+#    /usr/local/cuda-8.0/targets/x86_64-linux/lib/libcudnn.so.5 is not a symbolic link 
+sudo rm -rf /usr/lib/nvidia-375/libEGL.so.1
+sudo rm -rf /usr/lib32/nvidia-375/libEGL.so.1
+
+sudo ln -s /usr/lib/nvidia-375/libEGL.so.375.66 /usr/lib/nvidia-375/libEGL.so.1  
+sudo ln -s /usr/lib32/nvidia-375/libEGL.so.375.66 /usr/lib32/nvidia-375/libEGL.so.1
+sudo ldconfig
+
+# add CUDA lib to LD_LIBARY_PATH and PATH
+sudo vim ~/.bashrc
+# add cuda bin and lib64 into path and libpath
+export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/:/usr/local/cuda/lib64:$LD_LIBRARY_PATH  
+export PATH=/usr/local/cuda-8.0/bin:/usr/local/cuda/bin:$PATH
+
+# install caffe 
+sudo apt-get install git
+git clone https://github.com/BVLC/caffe.git
+
+
+# OPENBLAS installation
+cd ~/softwares
+git clone https://github.com/xianyi/OpenBLAS.git
+cd OpenBLAS
+sudo apt-get install gfortran
+make FC=gfortran
+make install
+sudo ln -s /opt/OpenBLAS/lib/libopenblas.so /usr/lib/libblas.so.3
+sudo ln -s /opt/OpenBLAS/lib/liblapack.so.3 /usr/lib/liblapack.so.3
+
+# Optional OPENCV installation
+# opencv 2.4.8 already installed
+# see installopencv.sh for more information
+
+# PYTHON dependencies installation
+cd ../caffe/python
+# sudo apt-get install python-pip
+for req in $(cat requirements.txt); do sudo pip install $req; done
+
+# edit Makefile.config to set corresponding path of each dependency then 
+make all -j8
+make pycaffe -j8
+make test -j8
+make runtest -j8
+# compatibility issue caused by different CUDNN version may occur
+# add caffe python library to PYTHONPATH
+sudo gedit ~/.bashrc
+# add following line in the last
+export PYTHONPATH=~/softwares/caffe/python:$PYTHONPATH
+# active the setting
+source ~/.bashrc
+
+# open a new terminal to activate the new PYTHONPATH env variable
+# RUN A caffe DEMO to validate the installation
+cd caffe
+# create lmdb dataset type from the original one
+./example/mnist/create_mnist.sh
+# train the lenet model 
+./example/mnist/train_lenet.sh
+
+# or
+nohup ./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt >> mnist_train.log &
+# for GTX1080Ti, 10000 iterations will be completed within 11 seconds with cudnn v7.1
+
+# PYTORCH INSTALLATION
+# first upgrade the pip 
+download get-pip.py
+cd Downloads
+python get-pip.py
+# uninstall python-pip by using Synaptic Package Mananger
+# or (optional) 
+sudo apt-get remove python-pip
+
+# then upgrade the pip version to 9.0.1
+#　then install pytorch
+sudo pip install http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl
+sudo pip install torchvision
+
+
+#　the compile dependency of torch7 demands the version of cudnn should be v5.1
+# TORCH installation
+cd software
+mkdir torch
+git clone https://github.com/torch/distro.git ./torch --recursive
+cd torch; bash install-deps;
+./install.sh
+source ~/.bashrc
+# open a new terminal to activate all the settings
+
+# TENSORFLOW INSTALLATION
+# first, download tensorflow-gpu v1.2.1 which is depended on cudnnv5.1 and cuda8.0, python 2.7
+sudo pip install --upgrade tensorflow_gpu-1.2.1-cp27-none-linux_x86_64
+
+# check(validate) your installation
+python
+import tensorflow as tf
+tf.__version__
+# which should print 1.2.1, and for further testing typein
+hello = tf.constant('Hello TF')
+sess = tf.Session()
+# which should print the following informations including GPU type and GPU memory etc.:
+......
+2017-09-17 19:11:01.240610: I tensorflow/core/common_runtime/gpu/gpu_device.cc:940] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti
+major: 6 minor: 1 memoryClockRate (GHz) 1.582
+pciBusID 0000:03:00.0
+Total memory: 10.91GiB
+Free memory: 10.42GiB
+2017-09-17 19:11:01.492891: W tensorflow/stream_executor/cuda/cuda_driver.cc:523] A non-primary context 0x4305030 exists before initializing the StreamExecutor. We haven't verified StreamExecutor works with that.
+2017-09-17 19:11:01.493716: I tensorflow/core/common_runtime/gpu/gpu_device.cc:940] Found device 1 with properties: 
+name: GeForce GTX 1080 Ti
+major: 6 minor: 1 memoryClockRate (GHz) 1.582
+pciBusID 0000:05:00.0
+Total memory: 10.91GiB
+Free memory: 10.49GiB
+2017-09-17 19:11:01.494438: I tensorflow/core/common_runtime/gpu/gpu_device.cc:961] DMA: 0 1 
+2017-09-17 19:11:01.494451: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   Y Y 
+2017-09-17 19:11:01.494455: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 1:   Y Y 
+2017-09-17 19:11:01.494466: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0)
+2017-09-17 19:11:01.494471: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Creating TensorFlow device (/gpu:1) -> (device: 1, name: GeForce GTX 1080 Ti, pci bus id: 0000:05:00.0)
+# then typein
+sess.run(hello)
+# which should print the constant string as follow
+'Hello TF!'
+
+# mxnet installation
+# when install packages by using pip, download procedure will always be aborded caused by the network state.
+# thus we need to manually download the corresponding packages from PYPI sites.
+# In https://pypi.python.org/pypi, searching for 'mxnet-cu80', then download the related package :
+# mxnet_cu80-0.11.1b20170917-py2.py3-none-manylinux1_x86_64.whl
+# then install the package through pip
+sudo pip install mxnet_cu80-0.11.1b20170917-py2.py3-none-manylinux1_x86_64.whl
+# check installation
+
+
+# version dependency
+================================================
+cuda|cudnn|Tensorflow|Torch7|Pytorch|caffe|mxnet
+================================================
+8.0 |v5.1 |1.2.1     |0.2.0 |0.2.03 |     |
+8.0 |v6   |1.3.1     |------|-------|     |
+8.0 |v7   |----------|------|-------|warn-|
+================================================
+
+
+# other installation
+#1 sogou input method
+# download the .deb installation file of sogou pinyin input method
+
+sudo dpkg -i sogoupinyin_2.1.0.0086_amd64.deb
+sudo apt-get install -f
+# go to system setting->language support->Keyboard input method system
+# switch IBus to fcitx
+# then
+# go to Keyboard->setting
+# click '+' to add  sogou pinyin
+# Cancel the selection of "only show current language"
+# and then manually searching for 'sogou'
+# then add the input method to the list
+# make sure the sogou pinyin is the last one in the list 
+# which means sogou pinyin will be regarded as the default input method
+# then reboot
+sudo reboot
+
